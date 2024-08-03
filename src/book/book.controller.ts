@@ -38,7 +38,7 @@ export class BookController {
 
   @Patch('/update/:id')
   async update(@Param('id') id: string, @Body() updateBookDto: UpdateBookDto) {
-    const data = this.bookService.update(+id, updateBookDto);
+    const data = await this.bookService.update(+id, updateBookDto);
     return { status: 200, message: 'Update book successfully', data };
   }
 
