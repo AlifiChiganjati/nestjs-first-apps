@@ -20,7 +20,7 @@ json : {
 "name": "Jhon Doe",
 "email": "jhondoe@example.com",
 "username": "jhondoe",
-"password": "$2b$10$OUYOGjWK7nEGdFZy2zWJIu0hKvGgdyc1DjfazCkmTGyf5BHN6utWy",
+"password": "Hash_Password",
 "id": 1,
 "created_at": "2024-08-03T03:02:21.653Z",
 "updated_at": "2024-08-03T03:02:21.653Z"
