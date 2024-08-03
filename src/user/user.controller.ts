@@ -5,45 +5,45 @@ import {
   Get,
   Param,
   Patch,
-  Post,
+  // Post,
   UseGuards,
 } from '@nestjs/common';
 import { UpdateUserDto } from './dto/update_user.dto';
-import { CreateUserDto } from './dto/create_user.dto';
+// import { CreateUserDto } from './dto/create_user.dto';
 import { UserService } from './user.service';
 import { JwtGuard } from 'src/auth/jwt.guard';
 
-@Controller('user')
-// @UseGuards(JwtGuard)
+@Controller('/api/user')
+@UseGuards(JwtGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
-  }
+  // @Post('/register')
+  // create(@Body() createUserDto: CreateUserDto) {
+  //   return this.userService.create(createUserDto);
+  // }
 
-  @UseGuards(JwtGuard)
   @Get()
-  findAll() {
-    return this.userService.findAll();
+  async findAll() {
+    const data = await this.userService.findAll();
+    return { status: 200, message: 'Success Get All User', data };
   }
 
-  @UseGuards(JwtGuard)
   @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.userService.findOne(+id);
+  async findOne(@Param('id') id: number) {
+    const data = this.userService.findOne(+id);
+    return { status: 200, message: 'Success get user', data };
   }
 
-  @UseGuards(JwtGuard)
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+  @Patch('/update/:id')
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    const data = await this.userService.update(+id, updateUserDto);
+    return { status: 200, message: 'Update user successfully', data };
   }
 
-  @UseGuards(JwtGuard)
-  @Delete(':id')
+  @Delete('/delete/:id')
   remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+    this.userService.remove(+id);
+    return { status: 200, message: 'Delete user successfully' };
   }
 }

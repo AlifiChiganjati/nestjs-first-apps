@@ -9,10 +9,15 @@ import {
 import { AuthDto } from './auth.dto';
 import { AuthService } from './auth.service';
 import { JwtGuard } from './jwt.guard';
+import { UserService } from 'src/user/user.service';
+import { CreateUserDto } from 'src/user/dto/create_user.dto';
 
-@Controller('auth')
+@Controller('/api/auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly userService: UserService,
+  ) {}
 
   @Get()
   @UseGuards(JwtGuard)
@@ -20,7 +25,7 @@ export class AuthController {
     return req.user;
   }
 
-  @Post()
+  @Post('/login')
   // @ApiResponse({
   //   status: 200,
   //   description: 'The record has been successfully created.',
@@ -31,6 +36,13 @@ export class AuthController {
       authDto.username,
       authDto.password,
     );
-    return this.authService.generateJwtToken({ id: user.id });
+    const token = await this.authService.generateJwtToken({ id: user.id });
+    return { Status: 200, message: 'Login successfully', token };
+  }
+
+  @Post('/register')
+  async create(@Body() createUserDto: CreateUserDto) {
+    const data = await this.userService.create(createUserDto);
+    return { status: 201, message: 'Success Create User', data };
   }
 }

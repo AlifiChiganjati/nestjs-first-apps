@@ -3,8 +3,8 @@ import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create_user.dto';
-import { Helper } from 'src/helper/helper';
 import { UpdateUserDto } from './dto/update_user.dto';
+import { Helper } from 'src/helper/helper';
 
 @Injectable()
 export class UserService {
@@ -44,6 +44,9 @@ export class UserService {
 
   async remove(id: any) {
     const user = await this.userRepo.findOne(id);
+    if (!user) {
+      throw new Error('User not found');
+    }
     return this.userRepo.remove(user);
   }
 }
